@@ -1,8 +1,7 @@
 const CustomError = require("../extensions/custom-error");
 
-module.exports = function transform(/* arr */) {
-  throw new CustomError("Not implemented");
-  /* remove line with error and write your code here
+module.exports = function transform(arr) {
+
   if (!Array.isArray(arr)) {
     throw new Error("Error");
   }
@@ -10,7 +9,13 @@ module.exports = function transform(/* arr */) {
     throw new Error("Error");
   }
   let result = arr;
-  result.splice(result.indexOf("--discard-next") + 1, 1);
-  result.splice(result.indexOf("--discard-prev") - 1, 1);
-  return result; */
+  for (let i = 0; i < result.length; i++ ) {
+    switch (arr[i]) {
+      case "--discard-next": result[i+1] !== undefined ? result.splice(i, 2, '', '') : result.splice(i, 1, '');//console.log(result);
+      case "--discard-prev": result[i-1] !== undefined && result[i-1] !== '' ? result.splice(i - 1, 2, '', '') : result.splice(i, 1, '');//console.log(result);
+      case "--double-next":  result[i+1] !== undefined ? result.splice(i, 1, result[i + 1]) : result.splice(i, 1, ''); //console.log(result);
+      case "--double-prev":  result[i-1] !== undefined && result[i-1] !== '' ? result.splice(i, 1, result[i - 1]) : result.splice(i, 1, '');// console.log(result);
+    } 
+  };
+  return result.filter(el => el !== ''); 
 };
